@@ -3,7 +3,6 @@ package application;
 import java.time.LocalDate;
 
 import business.BusinessObjectManager;
-import business.CrmSystem;
 import business.Customer;
 import business.Sale;
 import business.Seller;
@@ -15,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -23,17 +23,24 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import report.Report;
+import report.ReportManager;
 
 public class CrmUserWindow {
 
-	CrmSystem crmSystem = new CrmSystem();
 	AlertBox alertBox = new AlertBox();
 	ChoiceBox<Customer> choiceBoxCustomer = new ChoiceBox<>();
+	Stage logInStage;
 
 	Seller seller;
 
 	public void crmPrimaryWindow(Seller seller) { 
+		Stage stage = new Stage();
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setTitle("Inloggad som " + seller.getName() + ", ID: " + seller.getId()); // Visa inloggad säljare.
 		
 		// Hämtar säljarens lista på kunder.
 		ObservableList<Customer> observableCustomersList = 
@@ -46,9 +53,6 @@ public class CrmUserWindow {
 		ObservableList<String> observableStringList = FXCollections.observableArrayList(seller.pollMessagesToList());
 		ListView<String> messageView = new ListView<>(observableStringList);
 		messageView.setPrefHeight(300);
-		
-		Stage stage = new Stage();
-		stage.setTitle("Inloggad som " + seller.getName() + ", ID: " + seller.getId()); // Visa inloggad säljare.
 		
 		Label showAllCustomersLabel = new Label(); // Tom label bara för att passa bättre med boxen bredvid.
 		
@@ -75,14 +79,27 @@ public class CrmUserWindow {
 		Label reportLabel = new Label();
 		reportLabel.setText("Alternativ för att skapa rapport");
 		
-		ChoiceBox<String> choiceBoxReport = new ChoiceBox<>();
-		choiceBoxReport.getItems().addAll("Alla", "Kund", "Produkt");
-		choiceBoxReport.setValue("Alla");
+		
+		  ChoiceBox<String> choiceBoxReport = new ChoiceBox<>();
+		  choiceBoxReport.getItems().addAll("Alla dina sälj", "Specifik kund", "Specifik Produkt");
+		  choiceBoxReport.setValue("Alla dina sälj");
+		 
 		
 		Button createReportButton = new Button("Skapa rapport");
 		createReportButton.setOnAction(e -> {
-			showReportWindow(choiceBoxReport.getValue());
+			if(choiceBoxReport.getValue().equals("Alla dina sälj")) {
+				createReportBySellerWindow();
+			}
+			else if(choiceBoxReport.getValue().equals("Specifik kund")) {
+				createReportByCustomerWindow();
+			}
+			else if(choiceBoxReport.getValue().equals("Specifik Produkt")) {
+				createReportByProductWindow();
+			}
 		});
+		
+		Button showAllReportsButton = new Button("Visa rapporter");
+		showAllReportsButton.setOnAction( e -> showAllReportsWindow());
 		
 		Button exitButton = new Button("Logga ut");
 		exitButton.setOnAction(e -> stage.close());
@@ -110,7 +127,7 @@ public class CrmUserWindow {
 		hBoxCenter.setAlignment(Pos.CENTER);
 		hBoxCenter.setPadding(new Insets(20));
 		hBoxCenter.setSpacing(20);
-		hBoxCenter.getChildren().addAll(reportLabel, choiceBoxReport, createReportButton);
+		hBoxCenter.getChildren().addAll(reportLabel, choiceBoxReport, createReportButton, showAllReportsButton);
 		
 		HBox hBoxBottom = new HBox();
 		hBoxBottom.setAlignment(Pos.CENTER_RIGHT);
@@ -136,18 +153,224 @@ public class CrmUserWindow {
 		stage.show();
 
 	}
-	
-	public void showReportWindow(String string) {
+	public void createReportBySellerWindow() { // createNewReport(String title, String introduction, String objectName, int numberOfTrasactions, double amount)
+		Stage createCustomerReportStage = new Stage();
+		createCustomerReportStage.setTitle("Ny rapport");
 		
+		String objectName = seller.getName();
+		int numberOfSales = seller.getSales().size();
+		double totalAmount = BusinessObjectManager.getInstance().getTotalSellAmountFromSeller(seller);
+		
+		Label label = new Label();
+		label.setText("Fyll i fälten nedanför, Observera att en Titel behövs");
+		
+		TextField titleField = new TextField(); // titel, intro, objektnamn, antal, summa.
+		titleField.setPromptText("Titel");
+		titleField.setMaxWidth(110);
+		
+		TextField introductionField = new TextField();
+		introductionField.setPromptText("Introduktion");
+		introductionField.setMaxWidth(110);
+		
+		Button createButton = new Button("Skapa");
+		createButton.setOnAction(e -> {
+			Report report = ReportManager.getInstance().createNewReport(titleField.getText(), introductionField.getText(), objectName, numberOfSales, totalAmount);
+			alertBox.alertBox("Ny rapport skapad", "Rapportnummer: "+report.getReportNumber());
+			createCustomerReportStage.close();
+		});
+		
+		VBox vBox = new VBox();
+		vBox.getChildren().addAll(label, titleField, introductionField, createButton);
+		vBox.setAlignment(Pos.CENTER);
+		vBox.setSpacing(20);
+		vBox.setPadding(new Insets(10));
+		
+		Scene scene = new Scene(vBox, 300, 300);
+		createCustomerReportStage.setScene(scene);
+		createCustomerReportStage.show();
 	}
 	
+	public void createReportByProductWindow(){ // createNewReport(String title, String introduction, String objectName, int numberOfTrasactions, double amount)
+		Stage createCustomerReportStage = new Stage();
+		createCustomerReportStage.setTitle("Ny rapport");
+		
+		Label label = new Label();
+		label.setText("Fyll i fälten nedanför, Observera att en Titel behövs");
+		
+		TextField titleField = new TextField(); // titel, intro, objektnamn, antal, summa.
+		titleField.setPromptText("Titel");
+		titleField.setMaxWidth(110);
+		
+		TextField introductionField = new TextField();
+		introductionField.setPromptText("Introduktion");
+		introductionField.setMaxWidth(110);
+		
+		TextField productField = new TextField();
+		productField.setPromptText("Produkt");
+		productField.setMaxWidth(110);
+		
+		Button createButton = new Button("Skapa");
+		createButton.setOnAction(e -> {
+			try {
+				int numberOfPurchases = BusinessObjectManager.getInstance().getTotalNumberOfSalesForProduct(productField.getText());
+				double totalAmount = BusinessObjectManager.getInstance().getTotalSaleAmountOfProduct(productField.getText());
+				Report report = ReportManager.getInstance().createNewReport(titleField.getText(), introductionField.getText(), productField.getText(), numberOfPurchases, totalAmount);
+				alertBox.alertBox("Ny rapport skapad", "Rapportnummer: "+report.getReportNumber());
+				createCustomerReportStage.close();
+				
+			}
+			catch(NumberFormatException nfe){
+				alertBox.alertBox("Fel inmatning", "Kontrollera Ifyllda fält.");
+			}
+		});
+		
+		VBox vBox = new VBox();
+		vBox.getChildren().addAll(label, titleField, introductionField, productField, createButton);
+		vBox.setAlignment(Pos.CENTER);
+		vBox.setSpacing(20);
+		vBox.setPadding(new Insets(10));
+		
+		Scene scene = new Scene(vBox, 300, 300);
+		createCustomerReportStage.setScene(scene);
+		createCustomerReportStage.show();
+	}
+	
+	public void createReportByCustomerWindow() { // createNewReport(String title, String introduction, String objectName, int numberOfTrasactions, double amount)
+		Stage createCustomerReportStage = new Stage();
+		createCustomerReportStage.setTitle("Ny rapport");
+		
+		Label label = new Label();
+		label.setText("Fyll i fälten nedanför, Observera att en Titel behövs");
+		
+		TextField titleField = new TextField(); // titel, intro, objektnamn, antal, summa.
+		titleField.setPromptText("Titel");
+		titleField.setMaxWidth(110);
+		
+		TextField introductionField = new TextField();
+		introductionField.setPromptText("Introduktion");
+		introductionField.setMaxWidth(110);
+
+		TextField idField = new TextField();
+		idField.setPromptText("Kunden ID");
+		idField.setMaxWidth(110);
+
+		Button createButton = new Button("Skapa");
+		createButton.setOnAction(e -> {
+			try {
+				int id = Integer.parseInt(idField.getText());
+				Customer customer = BusinessObjectManager.getInstance().findCustomerById(id);
+				int numberOfPurchases = BusinessObjectManager.getInstance().getNumberOfItemsPerCustomer(customer);
+				double totalAmount = BusinessObjectManager.getInstance().getTotalPurchaseAmountFromCustomer(customer);
+				Report report = ReportManager.getInstance().createNewReport(titleField.getText(), introductionField.getText(), customer.getName(), numberOfPurchases, totalAmount);
+				alertBox.alertBox("Ny rapport skapad", "Rapportnummer: "+report.getReportNumber());
+				createCustomerReportStage.close();
+				
+			}
+			catch(NumberFormatException nfe){
+				alertBox.alertBox("Fel inmatning", "Kontrollera Ifyllda fält.");
+			}
+		});
+		
+		VBox vBox = new VBox();
+		vBox.getChildren().addAll(label, titleField, introductionField, idField, createButton);
+		vBox.setAlignment(Pos.CENTER);
+		vBox.setSpacing(20);
+		vBox.setPadding(new Insets(10));
+		
+		Scene scene = new Scene(vBox, 300, 300);
+		createCustomerReportStage.setScene(scene);
+		createCustomerReportStage.show();
+	}
+	
+	public void showAllReportsWindow() {
+		Stage showAllReportStage = new Stage();
+		showAllReportStage.setTitle("Alla Raporter");
+		ObservableList<Report> reportList = FXCollections.observableArrayList(ReportManager.getInstance().getAllReports());
+		
+		ListView<Report >listView = new ListView<>(reportList);
+        listView.setPrefSize(400, 300);
+        
+        listView.setCellFactory(new Callback<ListView<Report>, ListCell<Report>>() {
+            @Override
+            public ListCell<Report> call(ListView<Report> param) {
+                return new ListCell<Report>() {
+                    @Override
+                    protected void updateItem(Report item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item != null) {
+                            setText(item.toString());
+                        } else {
+                            setText(null);
+                        }
+                    }
+                };
+            }
+        });
+        
+        Button exportButton = new Button("Exportera rapport");
+        exportButton.setOnAction(e -> {
+        	Report selectedReport = listView.getSelectionModel().getSelectedItem();
+            if (selectedReport != null) {
+            	 ReportManager.getInstance().createExportDAO(selectedReport);
+            }
+        });
+        
+        Button exitButton = new Button("Avsluta");
+        exitButton.setOnAction(e -> showAllReportStage.close());
+        
+        VBox layout = new VBox(10);
+        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(listView, exportButton, exitButton);
+
+        Scene scene = new Scene(layout, 400, 400);
+        showAllReportStage.setScene(scene);
+        showAllReportStage.show();
+        
+	}
+	
+	@SuppressWarnings("unchecked")
 	public void showAllCustomersWindow() {
-		// Visa alla kunder i systemet.
+		Stage showAllCustomersStage = new Stage();
+		showAllCustomersStage.setTitle("Alla kunder i systemet");
+		showAllCustomersStage.initModality(Modality.APPLICATION_MODAL);
+		
+		ObservableList<Customer> observableSalesList = 
+				FXCollections.observableArrayList(BusinessObjectManager.getInstance()
+						.getListOfAllCustomers());
+		
+		TableView<Customer> tableView = new TableView<>(observableSalesList);
+		
+		TableColumn<Customer, String> nameColumn = new TableColumn<>("Namn");
+		nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+		
+		TableColumn<Customer, Integer> idColumn = new TableColumn<>("ID");
+		idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+		
+		TableColumn<Customer, String> adressColumn = new TableColumn<>("Adress");
+		adressColumn.setCellValueFactory(new PropertyValueFactory<>("adress"));
+		
+		tableView.getColumns().addAll(nameColumn, idColumn, adressColumn);
+		
+		Button exitButton = new Button("Stäng fönster");
+		exitButton.setOnAction(e -> showAllCustomersStage.close());
+		
+		VBox vBox = new VBox();
+		vBox.setAlignment(Pos.CENTER);
+		vBox.setSpacing(20);
+		vBox.setPadding(new Insets(10));
+		vBox.getChildren().addAll(tableView, exitButton);
+		
+		Scene scene = new Scene(vBox, 300, 300);
+		
+		showAllCustomersStage.setScene(scene);
+		showAllCustomersStage.show();
+		
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void showSalesWindow(Customer customer) { 
 		Stage showSalesStage = new Stage();
+		showSalesStage.initModality(Modality.APPLICATION_MODAL);
 		showSalesStage.setTitle("Dina försäljningar");
 		
 		ObservableList<Sale> observableSalesList = 
@@ -191,6 +414,7 @@ public class CrmUserWindow {
 	
 	public void newSaleWindow() {
 		Stage newSaleStage = new Stage();
+		newSaleStage.initModality(Modality.APPLICATION_MODAL);
 		newSaleStage.setTitle("Registrera ny försäljning");
 		
 		TextField productNameField = new TextField();
@@ -211,7 +435,7 @@ public class CrmUserWindow {
 		
 		Button newCustomerButton = new Button("Skapa ny kund"); 
 		newCustomerButton.setOnAction(e -> { // Skapa nytt kundkonto.
-			
+			createCustomerWindow();
 		});
 		
 		Button createSale = new Button("Spara försäljningen");
@@ -221,7 +445,7 @@ public class CrmUserWindow {
 			Customer customer = BusinessObjectManager.getInstance().findCustomerById(Integer.parseInt(customerIdField.getText()));
 			if(isPriceDouble && isNumberOfItemsInteger && !(customer==null)) {
 				BusinessObjectManager.getInstance().createNewSale(seller, customer, productNameField.getText(), productPriceField.getText(), numberOfProductsField.getText());
-				alertBox.confirmBox("Försäljning registrerad", "Försäljning till "+customer.getId()+" sparad");
+				alertBox.alertBox("Försäljning registrerad", "Försäljning till "+customer.getId()+" sparad");
 				productNameField.clear();
 				productPriceField.clear();
 				numberOfProductsField.clear();
@@ -231,7 +455,7 @@ public class CrmUserWindow {
 					}
 			}
 			else {
-				alertBox.confirmBox("Kan ej registrera försäljning", "Kontrollera uppgifterna");
+				alertBox.alertBox("Kan ej registrera försäljning", "Kontrollera uppgifterna");
 			}
 		});
 		
@@ -252,7 +476,13 @@ public class CrmUserWindow {
 
 	public void logInWindow() { 
 try {
-			Stage logInStage = new Stage();
+			logInStage = new Stage();
+			logInStage.initModality(Modality.APPLICATION_MODAL);
+			
+			logInStage.setOnCloseRequest( e -> { // event då användaren stänger programmet på krysset uppe i hörnet.
+				e.consume(); // consumar användarens val att stänga programmet, anropar istället metod closeProgram()
+				closeProgram(); // closeProgram öppnar en ConfirmBox, sparar sedan objekt till xml-fil innan programmet avslutas.
+			});
 			
 			Label infoLabel = new Label();
 			infoLabel.setText("Logga in med ditt ID eller skapa nytt konto");
@@ -274,7 +504,7 @@ try {
 					passWordField.clear();
 				}
 				else {
-					alertBox.confirmBox("Inloggnings misslyckades", "");
+					alertBox.alertBox("Inloggnings misslyckades", "");
 				}
 			});
 			
@@ -283,9 +513,15 @@ try {
 				createSellerWindow();
 			});
 			
+			Button closeProgramButton = new Button("Avsluta");
+			closeProgramButton.setOnAction( e -> {
+				closeProgram();
+				logInStage.close();
+			});
+			
 			VBox vBox = new VBox();
 			vBox.setAlignment(Pos.CENTER);
-			vBox.getChildren().addAll(infoLabel, idField, passWordField, logInButton, newSellerButton);
+			vBox.getChildren().addAll(infoLabel, idField, passWordField, logInButton, newSellerButton, closeProgramButton);
 			vBox.setSpacing(20);
 
 			Scene scene = new Scene(vBox,400,400);
@@ -302,6 +538,7 @@ try {
 	public void createSellerWindow() {
 		
 		Stage stage = new Stage();
+		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle("Skapa nytt konto");
 		
 		TextField nameField = new TextField();
@@ -325,12 +562,12 @@ try {
         	if (!nameField.getText().isEmpty() && !adressField.getText().isEmpty() && !passWordField.getText().isEmpty() && passWordField.getText().equals(passWordFieldTwo.getText())){
         		int id = BusinessObjectManager.getInstance().createNewSeller(nameField.getText(), adressField.getText(), passWordField.getText());
         		if(!(id==0)) {
-        			alertBox.confirmBox("Konto skapat", "Ditt ID: "+id+"\n\n(Kom ihåg ditt ID och lösenord)");
+        			alertBox.alertBox("Konto skapat", "Ditt ID: "+id+"\n\n(Kom ihåg ditt ID och lösenord)");
         			stage.close();
         		}
         	}
         	else {
-        		alertBox.confirmBox("Gick ej att skapa konto", "Kontrollera att alla fält är korrekt ifyllda.");
+        		alertBox.alertBox("Gick ej att skapa konto", "Kontrollera att alla fält är korrekt ifyllda.");
         	}
         });
         
@@ -350,7 +587,11 @@ try {
 	public void createCustomerWindow() {
 		
 		Stage stage = new Stage();
+		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle("Skapa nytt konto");
+		
+		Label label = new Label();
+		label.setText("Fyll i kundens namn och adress nedan.");
 		
 		TextField nameField = new TextField();
 		nameField.setPromptText("Namn");
@@ -365,12 +606,12 @@ try {
         	if (!nameField.getText().isEmpty() && !adressField.getText().isEmpty()){
         		int id = BusinessObjectManager.getInstance().createNewCustomer(nameField.getText(), adressField.getText());
         		if(!(id==0)) {
-        			alertBox.confirmBox("Kund tillagd", "Kundens ID: "+id);
+        			alertBox.alertBox("Kund tillagd", "Kundens ID: "+id);
         			stage.close();
         		}
         	}
         	else {
-        		alertBox.confirmBox("Gick ej att skapa kund", "Kontrollera att alla fält är korrekt ifyllda.");
+        		alertBox.alertBox("Gick ej att skapa kund", "Kontrollera att alla fält är korrekt ifyllda.");
         	}
         });
         
@@ -380,10 +621,20 @@ try {
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(20);
-        vBox.getChildren().addAll(nameField, adressField, createButton, exitButton);
+        vBox.getChildren().addAll(label, nameField, adressField, createButton, exitButton);
         
         Scene scene = new Scene(vBox, 400, 400);
         stage.setScene(scene);
         stage.show();
+	}
+	
+	public void closeProgram() {
+		Boolean answer = alertBox.confirmBox("Bekräftelse", "Avsluta Program?");
+		if (answer == true)
+		{
+			BusinessObjectManager.getInstance().serializeAll(); // Sparar bokningar och rum till XML innan avslut.
+			logInStage.close();
+			System.out.println("Sparat till xml.\nTack å hej, leverpastej..");
+		}
 	}
 }

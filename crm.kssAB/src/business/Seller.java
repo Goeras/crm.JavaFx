@@ -1,13 +1,18 @@
 package business;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class Seller {
+public class Seller implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3546819275557444490L;
 	private int id; // 100-999
 	private String password;
 	private String name;

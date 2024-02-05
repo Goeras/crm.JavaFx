@@ -37,7 +37,7 @@ public void serializeSeller(List<Seller> sellerList) {
     }
 
 	
-	public List<Seller> deserializeGuest(List<Seller> sellerList) {
+	public List<Seller> deserializeSeller(List<Seller> sellerList) {
 		try {
 			String filepath = ".sellers.xml";
 			File file = new File(filepath);

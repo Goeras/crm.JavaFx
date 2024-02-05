@@ -4,10 +4,16 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+
+import fileProcessing.BusinessObjectFileProcessing;
 
 public class BusinessObjectManager {
+	
+	BusinessObjectFileProcessing fileProcessing = new BusinessObjectFileProcessing();
 
 	private List<Customer> listOfAllCustomers = new ArrayList<>();
 	private List<Seller> listOfAllSellers = new ArrayList<>();
@@ -120,6 +126,7 @@ public class BusinessObjectManager {
 		
 		Sale sale = new Sale(productName, saleId, Double.parseDouble(price), Integer.parseInt(numberOfItems), date, customer, seller);
 		
+		listOfAllSales.add(sale); // lägger till i listan över alla sälj.
 		seller.addSale(sale); // lägger till försäljningen till säljarens List.
 		seller.addCustomer(customer); // lägger till kunden till säljarens HashSet
 		customer.addPurchase(sale); // lägger till försäljningen till kundens List.
@@ -217,58 +224,104 @@ public class BusinessObjectManager {
 			System.out.println("Name: "+customer.getName()+", ID: "+customer.getId());
 			
 		}
+	}
+	
+	public List<Sale> getSalesByProduct(String product){ // Returnerar alla sälj oavsett säljare..
+		List<Sale> listOfMatchingProducts = new ArrayList<>();
+		for(Sale sale : listOfAllSales) {
+			if(sale.getProductName().equalsIgnoreCase(product)) {
+				listOfMatchingProducts.add(sale);
+			}
+		}
+		return listOfMatchingProducts;
+	}
+	
+	public int getNumberOfItemsPerCustomer(Customer customer) {
+		int numberOfPurchases = 0;
+		for(Sale sale : customer.getPurchases()) {
+			numberOfPurchases += sale.getNumberOfItems();
+		}
+		return numberOfPurchases;
+	}
+	
+	public int getNumberOfPurchasesPerCustomer(Customer customer) {
+		
+		return customer.getPurchases().size();
+	}
+	
+	public Set<String> getSoldUniqueProducts(){
+		Set<String> uniqueProducts = new HashSet();
+		for(Sale sale : listOfAllSales) {
+			uniqueProducts.add(sale.getProductName());
+		}
+		return uniqueProducts;
+	}
+	
+	public double getTotalSellAmountFromSeller(Seller seller) {
+		double amount = 0;
+		for (Sale sale : seller.getSales()) {
+			amount += sale.getPrice();
+		}
+		return amount;
+	}
+	
+	public double getTotalPurchaseAmountFromCustomer(Customer customer) {
+		double totalAmount = 0;
+		for(Sale sale : customer.getPurchases()) {
+			totalAmount += sale.getPrice();
+		}
+		return totalAmount;
+	}
+	public int getTotalNumberOfSalesForProduct(String product) {
+		System.out.println(product);
+		System.out.println(listOfAllSales.size());
+		int numberOfSales = 0;
+		for(Sale sale : listOfAllSales) {
+			System.out.println(sale.getProductName());
+			if(sale.getProductName().equalsIgnoreCase(product)) {
+				numberOfSales += sale.getNumberOfItems();
+				System.out.println("getTotalNumberOfSalesForProduct 2");
+			}
+		}
+		return numberOfSales;
+	}
+	
+	public double getTotalSaleAmountOfProduct(String product) {
+		double totalAmount = 0;
+		for(Sale sale : listOfAllSales) {
+			if(sale.getProductName().equalsIgnoreCase(product)) {
+				totalAmount += sale.getPrice();
+			}
+		}
+		return totalAmount;
+	}
+	
+	public void serializeAll() {
+		
+		fileProcessing.serializeSeller(listOfAllSellers);
+		fileProcessing.serializeCustomer(listOfAllCustomers);
+		fileProcessing.serializeSale(listOfAllSales);
+	}
+	
+	public void deserializeAll() {
+		
+		this.listOfAllSellers = fileProcessing.deserializeSeller(listOfAllSellers);
+		this.listOfAllCustomers = fileProcessing.deserializeCustomer(listOfAllCustomers);
+		this.listOfAllSales = fileProcessing.deserializeSale(listOfAllSales);
 		
 	}
 
 	public void addStartingObjects() {
-		Seller seller1 = new Seller();
-		seller1.setName("admin");
-		seller1.setId(1);
-		seller1.setPassword("admin");
-		listOfAllSellers.add(seller1);
+		if(listOfAllSellers.isEmpty()) {
+			
+			createNewSeller("Säljare1", "Ingen Adress", "0000");
+			createNewSeller("Säljare2", "Ingen Adress", "0000");
+		}
+		if(listOfAllCustomers.isEmpty()) {
+			
+			createNewCustomer("Kund1", "Ingen adress");
+			createNewCustomer("Kund2", "Ingen adress");
+		}
 		
-		Customer customer1 = new Customer();
-		customer1.setName("Testkund 1");
-		customer1.setId(1111);
-		listOfAllCustomers.add(customer1);
-		
-		Customer customer2 = new Customer();
-		customer2.setName("Testkund 2");
-		customer2.setId(2222);
-		listOfAllCustomers.add(customer2);
-		
-		Sale sale1 = new Sale();
-		sale1.setCustomer(customer1);
-		sale1.setSaleId(35000000);
-		sale1.setDate(LocalDate.now());
-		sale1.setNumberOfItems(1);
-		sale1.setPrice(29.99);
-		sale1.setProductName("Snus");
-		listOfAllSales.add(sale1);
-		
-		seller1.addCustomer(customer1);
-		seller1.addSale(sale1);
-		
-		Sale sale2 = new Sale();
-		sale2.setCustomer(customer1);
-		sale2.setSaleId(35000000);
-		sale2.setDate(LocalDate.now());
-		sale2.setNumberOfItems(1);
-		sale2.setPrice(29.99);
-		sale2.setProductName("whiskey");
-		listOfAllSales.add(sale2);
-		
-		Sale sale3 = new Sale();
-		sale3.setCustomer(customer2);
-		sale3.setSaleId(35000000);
-		sale3.setDate(LocalDate.now());
-		sale3.setNumberOfItems(1);
-		sale3.setPrice(29.99);
-		sale3.setProductName("Tobak");
-		listOfAllSales.add(sale3);
-		
-		seller1.addCustomer(customer2);
-		seller1.addSale(sale2);
-		seller1.addSale(sale3);
 	}
 }

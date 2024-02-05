@@ -16,15 +16,14 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		
-		SaleListener saleListener = new SaleListener();
-		BusinessObjectManager.getInstance().addPropertyChangeListener(saleListener);
-		//BusinessObjectManager businessObjectManager = BusinessObjectManager.getInstance();
-		//businessObjectManager.addPropertyChangeListener(saleListener);
+		SaleListener saleListener = new SaleListener(); // skapar upp ett objekt av lyssnarklassen
+		BusinessObjectManager.getInstance().addPropertyChangeListener(saleListener); // Lägger till lyssnare
+		BusinessObjectManager.getInstance().deserializeAll();// Läser in objekt från xml.
+		BusinessObjectManager.getInstance().addStartingObjects(); // Lägger till dummies om listorna är tomma.
 		
-		BusinessObjectManager.getInstance().addStartingObjects();
 		BusinessObjectManager.getInstance().printAllSellersAndCustomersToConsole(); // Konsolprintmetod för utvecklaren under systemets uppbyggnad..
 		
-		crmUserWindow.logInWindow();
+		crmUserWindow.logInWindow(); // kör igång programmet.
 	}
 	
 	public static void main(String[] args) {

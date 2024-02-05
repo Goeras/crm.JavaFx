@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="20.0.2" class="java.beans.XMLDecoder">
+ <object class="java.util.ArrayList">
+  <void method="add">
+   <object class="business.Seller">
+    <void property="adress">
+     <string>Ingen Adress</string>
+    </void>
+    <void property="id">
+     <int>804</int>
+    </void>
+    <void property="name">
+     <string>Säljare1</string>
+    </void>
+    <void property="password">
+     <string>0000</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="business.Seller">
+    <void property="adress">
+     <string>Ingen Adress</string>
+    </void>
+    <void property="id">
+     <int>980</int>
+    </void>
+    <void property="name">
+     <string>Säljare2</string>
+    </void>
+    <void property="password">
+     <string>0000</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="business.Seller" id="Seller0">
+    <void property="adress">
+     <string>Rörosvägen 5</string>
+    </void>
+    <void property="customers">
+     <void method="add">
+      <object class="business.Customer" id="Customer0">
+       <void property="adress">
+        <string>Ingen adress</string>
+       </void>
+       <void property="id">
+        <int>3113</int>
+       </void>
+       <void property="name">
+        <string>Kund1</string>
+       </void>
+       <void property="purchases">
+        <void method="add">
+         <object class="business.Sale" id="Sale0">
+          <void property="customer">
+           <object idref="Customer0"/>
+          </void>
+          <void property="date">
+           <object class="java.time.LocalDate" method="parse">
+            <string>2024-02-05</string>
+           </object>
+          </void>
+          <void property="numberOfItems">
+           <int>1</int>
+          </void>
+          <void property="price">
+           <double>15.0</double>
+          </void>
+          <void property="productName">
+           <string>glass</string>
+          </void>
+          <void property="saleId">
+           <int>29744</int>
+          </void>
+          <void property="seller">
+           <object idref="Seller0"/>
+          </void>
+         </object>
+        </void>
+       </void>
+      </object>
+     </void>
+    </void>
+    <void property="id">
+     <int>330</int>
+    </void>
+    <void property="name">
+     <string>Markus</string>
+    </void>
+    <void property="password">
+     <string>123</string>
+    </void>
+    <void property="sales">
+     <void method="add">
+      <object idref="Sale0"/>
+     </void>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>

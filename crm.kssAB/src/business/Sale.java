@@ -1,9 +1,14 @@
 package business;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Sale {
+public class Sale implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6854202571904838970L;
 	private String productName;
 	private int saleId; // 10000 - 99999
 	private double price;
