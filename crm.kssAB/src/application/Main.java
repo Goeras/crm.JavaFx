@@ -1,9 +1,7 @@
 package application;
 	
 import business.BusinessObjectManager;
-import business.Customer;
 import business.SaleListener;
-import business.Seller;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

@@ -250,7 +250,7 @@ public class BusinessObjectManager {
 	}
 	
 	public Set<String> getSoldUniqueProducts(){
-		Set<String> uniqueProducts = new HashSet();
+		Set<String> uniqueProducts = new HashSet<>();
 		for(Sale sale : listOfAllSales) {
 			uniqueProducts.add(sale.getProductName());
 		}
@@ -314,13 +314,16 @@ public class BusinessObjectManager {
 	public void addStartingObjects() {
 		if(listOfAllSellers.isEmpty()) {
 			
-			createNewSeller("Säljare1", "Ingen Adress", "0000");
-			createNewSeller("Säljare2", "Ingen Adress", "0000");
+			createNewSeller("Michael Scott", "The Office", "0000");
+			createNewSeller("Mark Hanna", "Wall Street", "0000");
+			createNewSeller("Jordan Belfort", "Wall Street", "0000");
 		}
 		if(listOfAllCustomers.isEmpty()) {
 			
-			createNewCustomer("Kund1", "Ingen adress");
-			createNewCustomer("Kund2", "Ingen adress");
+			createNewCustomer("Johnny Knoxville", "Tennessee");
+			createNewCustomer("Jokkmokks-Jocke", "Jokkmokk");
+			createNewCustomer("Bengt Magnusson", "Ystad");
+			createNewCustomer("Stefan Ingves", "Åbo");
 		}
 		
 	}

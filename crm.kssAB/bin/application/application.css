@@ -1,1 +1,36 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.root {
+    -fx-background-image: url("/application/Ocean.png");
+    -fx-background-repeat: no-repeat; 
+	-fx-background-size: stretch;
+}
+.label {
+    -fx-text-fill: black;
+    -fx-background-color: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+.dialog-pane .header-panel {
+    -fx-background-color: linear-gradient(to bottom right, black, purple);
+}
+.scroll-pane {
+	-fx-background-color: linear-gradient(to bottom right, black, purple);
+}
+.button {
+    -fx-background-color: linear-gradient(to bottom, #b0c0d1, #98a8b8);
+    -fx-background-radius: 5, 4, 3, 5;
+    -fx-background-insets: 0, 1, 2, 0;
+    -fx-padding: 7 30 7 30;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-color: #30353b;
+    -fx-border-width: 2;
+}
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #ffcc99, #ffaa66);
+}
+.button:pressed {
+    -fx-background-color: linear-gradient(to bottom, #996633, #cc9933);
+    -fx-background-insets: 0, 1, 2, 0;
+    -fx-padding: 8 29 8 31;
+}

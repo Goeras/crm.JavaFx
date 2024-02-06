@@ -148,21 +148,22 @@ public class CrmUserWindow {
 		layout.setRight(vBoxRight);
 		
 		Scene scene = new Scene(layout, 600, 600);
-		
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		stage.setScene(scene);
 		stage.show();
 
 	}
 	public void createReportBySellerWindow() { // createNewReport(String title, String introduction, String objectName, int numberOfTrasactions, double amount)
-		Stage createCustomerReportStage = new Stage();
-		createCustomerReportStage.setTitle("Ny rapport");
+		Stage createSellerReportStage = new Stage();
+		createSellerReportStage.initModality(Modality.APPLICATION_MODAL);
+		createSellerReportStage.setTitle("Ny rapport");
 		
 		String objectName = seller.getName();
 		int numberOfSales = seller.getSales().size();
 		double totalAmount = BusinessObjectManager.getInstance().getTotalSellAmountFromSeller(seller);
 		
 		Label label = new Label();
-		label.setText("Fyll i fälten nedanför, Observera att en Titel behövs");
+		label.setText("Fyll i 'Titel' och 'Introuktion' i fälten nedan.");
 		
 		TextField titleField = new TextField(); // titel, intro, objektnamn, antal, summa.
 		titleField.setPromptText("Titel");
@@ -176,7 +177,7 @@ public class CrmUserWindow {
 		createButton.setOnAction(e -> {
 			Report report = ReportManager.getInstance().createNewReport(titleField.getText(), introductionField.getText(), objectName, numberOfSales, totalAmount);
 			alertBox.alertBox("Ny rapport skapad", "Rapportnummer: "+report.getReportNumber());
-			createCustomerReportStage.close();
+			createSellerReportStage.close();
 		});
 		
 		VBox vBox = new VBox();
@@ -186,16 +187,18 @@ public class CrmUserWindow {
 		vBox.setPadding(new Insets(10));
 		
 		Scene scene = new Scene(vBox, 300, 300);
-		createCustomerReportStage.setScene(scene);
-		createCustomerReportStage.show();
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		createSellerReportStage.setScene(scene);
+		createSellerReportStage.show();
 	}
 	
 	public void createReportByProductWindow(){ // createNewReport(String title, String introduction, String objectName, int numberOfTrasactions, double amount)
-		Stage createCustomerReportStage = new Stage();
-		createCustomerReportStage.setTitle("Ny rapport");
+		Stage createProductReportStage = new Stage();
+		createProductReportStage.initModality(Modality.APPLICATION_MODAL);
+		createProductReportStage.setTitle("Ny rapport");
 		
 		Label label = new Label();
-		label.setText("Fyll i fälten nedanför, Observera att en Titel behövs");
+		label.setText("Fyll i 'Titel' och 'Introuktion' i fälten nedan.");
 		
 		TextField titleField = new TextField(); // titel, intro, objektnamn, antal, summa.
 		titleField.setPromptText("Titel");
@@ -216,11 +219,11 @@ public class CrmUserWindow {
 				double totalAmount = BusinessObjectManager.getInstance().getTotalSaleAmountOfProduct(productField.getText());
 				Report report = ReportManager.getInstance().createNewReport(titleField.getText(), introductionField.getText(), productField.getText(), numberOfPurchases, totalAmount);
 				alertBox.alertBox("Ny rapport skapad", "Rapportnummer: "+report.getReportNumber());
-				createCustomerReportStage.close();
+				createProductReportStage.close();
 				
 			}
 			catch(NumberFormatException nfe){
-				alertBox.alertBox("Fel inmatning", "Kontrollera Ifyllda fält.");
+				alertBox.alertBox("Fel inmatning", "Kontrollera ifyllda fält.");
 			}
 		});
 		
@@ -231,16 +234,18 @@ public class CrmUserWindow {
 		vBox.setPadding(new Insets(10));
 		
 		Scene scene = new Scene(vBox, 300, 300);
-		createCustomerReportStage.setScene(scene);
-		createCustomerReportStage.show();
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		createProductReportStage.setScene(scene);
+		createProductReportStage.show();
 	}
 	
 	public void createReportByCustomerWindow() { // createNewReport(String title, String introduction, String objectName, int numberOfTrasactions, double amount)
 		Stage createCustomerReportStage = new Stage();
+		createCustomerReportStage.initModality(Modality.APPLICATION_MODAL);
 		createCustomerReportStage.setTitle("Ny rapport");
 		
 		Label label = new Label();
-		label.setText("Fyll i fälten nedanför, Observera att en Titel behövs");
+		label.setText("Fyll i 'Titel' och 'Introuktion' i fälten nedan.");
 		
 		TextField titleField = new TextField(); // titel, intro, objektnamn, antal, summa.
 		titleField.setPromptText("Titel");
@@ -251,7 +256,7 @@ public class CrmUserWindow {
 		introductionField.setMaxWidth(110);
 
 		TextField idField = new TextField();
-		idField.setPromptText("Kunden ID");
+		idField.setPromptText("Kundens ID");
 		idField.setMaxWidth(110);
 
 		Button createButton = new Button("Skapa");
@@ -267,7 +272,7 @@ public class CrmUserWindow {
 				
 			}
 			catch(NumberFormatException nfe){
-				alertBox.alertBox("Fel inmatning", "Kontrollera Ifyllda fält.");
+				alertBox.alertBox("Fel inmatning", "Kontrollera ifyllda fält.");
 			}
 		});
 		
@@ -278,12 +283,14 @@ public class CrmUserWindow {
 		vBox.setPadding(new Insets(10));
 		
 		Scene scene = new Scene(vBox, 300, 300);
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		createCustomerReportStage.setScene(scene);
 		createCustomerReportStage.show();
 	}
 	
 	public void showAllReportsWindow() {
 		Stage showAllReportStage = new Stage();
+		showAllReportStage.initModality(Modality.APPLICATION_MODAL);
 		showAllReportStage.setTitle("Alla Raporter");
 		ObservableList<Report> reportList = FXCollections.observableArrayList(ReportManager.getInstance().getAllReports());
 		
@@ -312,6 +319,8 @@ public class CrmUserWindow {
         	Report selectedReport = listView.getSelectionModel().getSelectedItem();
             if (selectedReport != null) {
             	 ReportManager.getInstance().createExportDAO(selectedReport);
+            	 alertBox.alertBox("Exportering lyckad", "Rapport "+selectedReport.getReportNumber()+" exporterad till XML");
+            	 showAllReportStage.close();
             }
         });
         
@@ -323,6 +332,7 @@ public class CrmUserWindow {
         layout.getChildren().addAll(listView, exportButton, exitButton);
 
         Scene scene = new Scene(layout, 400, 400);
+        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
         showAllReportStage.setScene(scene);
         showAllReportStage.show();
         
@@ -361,7 +371,7 @@ public class CrmUserWindow {
 		vBox.getChildren().addAll(tableView, exitButton);
 		
 		Scene scene = new Scene(vBox, 300, 300);
-		
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		showAllCustomersStage.setScene(scene);
 		showAllCustomersStage.show();
 		
@@ -408,6 +418,7 @@ public class CrmUserWindow {
 		tableView.getColumns().addAll(nameColumn, idColumn, priceColumn, quantityColumn, dateColumn, customerColumn);
 		
 		Scene scene = new Scene(tableView, 480, 500);
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		showSalesStage.setScene(scene);
 		showSalesStage.show();
 	}
@@ -468,6 +479,7 @@ public class CrmUserWindow {
 		vBox.getChildren().addAll(newCustomerButton, productNameField, productPriceField, numberOfProductsField, customerIdField, createSale, exitButton);
 		
 		Scene scene = new Scene(vBox, 200, 350);
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		newSaleStage.setScene(scene);
 		newSaleStage.show();
 		
@@ -514,10 +526,7 @@ try {
 			});
 			
 			Button closeProgramButton = new Button("Avsluta");
-			closeProgramButton.setOnAction( e -> {
-				closeProgram();
-				logInStage.close();
-			});
+			closeProgramButton.setOnAction( e -> closeProgram());
 			
 			VBox vBox = new VBox();
 			vBox.setAlignment(Pos.CENTER);
@@ -580,6 +589,7 @@ try {
         vBox.getChildren().addAll(nameField, adressField, passWordField, passWordFieldTwo, createButton, exitButton);
         
         Scene scene = new Scene(vBox, 400, 400);
+        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
 	}
@@ -624,6 +634,7 @@ try {
         vBox.getChildren().addAll(label, nameField, adressField, createButton, exitButton);
         
         Scene scene = new Scene(vBox, 400, 400);
+        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
 	}
