@@ -207,14 +207,6 @@
             <void property="id">
              <int>659</int>
             </void>
-            <void property="messages">
-             <void method="add">
-              <string>2024-02-06. Säljare: Michael Scott, ID:945, har sålt Skrivarpapper till kund: Stefan Ingves, ID: 6468</string>
-             </void>
-             <void method="add">
-              <string>2024-02-06. Säljare: Michael Scott, ID:945, har sålt Skrivarpapper till kund: Bengt Magnusson, ID: 7348</string>
-             </void>
-            </void>
             <void property="name">
              <string>Tomas Wigell</string>
             </void>
@@ -234,13 +226,331 @@
              <void method="add">
               <object idref="Sale0"/>
              </void>
+             <void method="add">
+              <object class="business.Sale" id="Sale5">
+               <void property="customer">
+                <object class="business.Customer" id="Customer4">
+                 <void property="adress">
+                  <string>Åbo</string>
+                 </void>
+                 <void property="id">
+                  <int>6468</int>
+                 </void>
+                 <void property="name">
+                  <string>Stefan Ingves</string>
+                 </void>
+                 <void property="purchases">
+                  <void method="add">
+                   <object class="business.Sale" id="Sale6">
+                    <void property="customer">
+                     <object idref="Customer4"/>
+                    </void>
+                    <void property="date">
+                     <object class="java.time.LocalDate" method="parse">
+                      <string>2024-02-06</string>
+                     </object>
+                    </void>
+                    <void property="numberOfItems">
+                     <int>1</int>
+                    </void>
+                    <void property="price">
+                     <double>65.0</double>
+                    </void>
+                    <void property="productName">
+                     <string>Ettan Lös</string>
+                    </void>
+                    <void property="saleId">
+                     <int>11506</int>
+                    </void>
+                    <void property="seller">
+                     <object class="business.Seller" id="Seller2">
+                      <void property="adress">
+                       <string>Gustafs</string>
+                      </void>
+                      <void property="customers">
+                       <void method="add">
+                        <object class="business.Customer" id="Customer5">
+                         <void property="adress">
+                          <string>Ystad</string>
+                         </void>
+                         <void property="id">
+                          <int>7348</int>
+                         </void>
+                         <void property="name">
+                          <string>Bengt Magnusson</string>
+                         </void>
+                         <void property="purchases">
+                          <void method="add">
+                           <object class="business.Sale" id="Sale7">
+                            <void property="customer">
+                             <object idref="Customer5"/>
+                            </void>
+                            <void property="date">
+                             <object class="java.time.LocalDate" method="parse">
+                              <string>2024-02-06</string>
+                             </object>
+                            </void>
+                            <void property="numberOfItems">
+                             <int>1</int>
+                            </void>
+                            <void property="price">
+                             <double>65.0</double>
+                            </void>
+                            <void property="productName">
+                             <string>Ettan Lös</string>
+                            </void>
+                            <void property="saleId">
+                             <int>56155</int>
+                            </void>
+                            <void property="seller">
+                             <object idref="Seller2"/>
+                            </void>
+                           </object>
+                          </void>
+                          <void method="add">
+                           <object class="business.Sale" id="Sale8">
+                            <void property="customer">
+                             <object idref="Customer5"/>
+                            </void>
+                            <void property="date">
+                             <object class="java.time.LocalDate" method="parse">
+                              <string>2024-02-06</string>
+                             </object>
+                            </void>
+                            <void property="numberOfItems">
+                             <int>1</int>
+                            </void>
+                            <void property="price">
+                             <double>89.0</double>
+                            </void>
+                            <void property="productName">
+                             <string>Skrivarpapper</string>
+                            </void>
+                            <void property="saleId">
+                             <int>28822</int>
+                            </void>
+                            <void property="seller">
+                             <object class="business.Seller" id="Seller3">
+                              <void property="adress">
+                               <string>The Office</string>
+                              </void>
+                              <void property="customers">
+                               <void method="add">
+                                <object idref="Customer4"/>
+                               </void>
+                               <void method="add">
+                                <object idref="Customer5"/>
+                               </void>
+                              </void>
+                              <void property="id">
+                               <int>945</int>
+                              </void>
+                              <void property="name">
+                               <string>Michael Scott</string>
+                              </void>
+                              <void property="password">
+                               <string>0000</string>
+                              </void>
+                              <void property="sales">
+                               <void method="add">
+                                <object class="business.Sale" id="Sale9">
+                                 <void property="customer">
+                                  <object idref="Customer4"/>
+                                 </void>
+                                 <void property="date">
+                                  <object class="java.time.LocalDate" method="parse">
+                                   <string>2024-02-06</string>
+                                  </object>
+                                 </void>
+                                 <void property="numberOfItems">
+                                  <int>1</int>
+                                 </void>
+                                 <void property="price">
+                                  <double>89.0</double>
+                                 </void>
+                                 <void property="productName">
+                                  <string>Skrivarpapper</string>
+                                 </void>
+                                 <void property="saleId">
+                                  <int>17004</int>
+                                 </void>
+                                 <void property="seller">
+                                  <object idref="Seller3"/>
+                                 </void>
+                                </object>
+                               </void>
+                               <void method="add">
+                                <object idref="Sale8"/>
+                               </void>
+                              </void>
+                             </object>
+                            </void>
+                           </object>
+                          </void>
+                         </void>
+                        </object>
+                       </void>
+                       <void method="add">
+                        <object idref="Customer4"/>
+                       </void>
+                       <void method="add">
+                        <object class="business.Customer" id="Customer6">
+                         <void property="adress">
+                          <string>Tennessee</string>
+                         </void>
+                         <void property="id">
+                          <int>1195</int>
+                         </void>
+                         <void property="name">
+                          <string>Johnny Knoxville</string>
+                         </void>
+                         <void property="purchases">
+                          <void method="add">
+                           <object class="business.Sale" id="Sale10">
+                            <void property="customer">
+                             <object idref="Customer6"/>
+                            </void>
+                            <void property="date">
+                             <object class="java.time.LocalDate" method="parse">
+                              <string>2024-02-06</string>
+                             </object>
+                            </void>
+                            <void property="numberOfItems">
+                             <int>1</int>
+                            </void>
+                            <void property="price">
+                             <double>65.0</double>
+                            </void>
+                            <void property="productName">
+                             <string>Ettan Lös</string>
+                            </void>
+                            <void property="saleId">
+                             <int>72596</int>
+                            </void>
+                            <void property="seller">
+                             <object idref="Seller2"/>
+                            </void>
+                           </object>
+                          </void>
+                         </void>
+                        </object>
+                       </void>
+                       <void method="add">
+                        <object class="business.Customer" id="Customer7">
+                         <void property="adress">
+                          <string>Jokkmokk</string>
+                         </void>
+                         <void property="id">
+                          <int>9566</int>
+                         </void>
+                         <void property="name">
+                          <string>Jokkmokks-Jocke</string>
+                         </void>
+                         <void property="purchases">
+                          <void method="add">
+                           <object class="business.Sale" id="Sale11">
+                            <void property="customer">
+                             <object idref="Customer7"/>
+                            </void>
+                            <void property="date">
+                             <object class="java.time.LocalDate" method="parse">
+                              <string>2024-02-06</string>
+                             </object>
+                            </void>
+                            <void property="numberOfItems">
+                             <int>1</int>
+                            </void>
+                            <void property="price">
+                             <double>65.0</double>
+                            </void>
+                            <void property="productName">
+                             <string>Ettan Lös</string>
+                            </void>
+                            <void property="saleId">
+                             <int>47918</int>
+                            </void>
+                            <void property="seller">
+                             <object idref="Seller2"/>
+                            </void>
+                           </object>
+                          </void>
+                         </void>
+                        </object>
+                       </void>
+                      </void>
+                      <void property="id">
+                       <int>659</int>
+                      </void>
+                      <void property="messages">
+                       <void method="add">
+                        <string>2024-02-06. Säljare: Michael Scott, ID:945, har sålt Skrivarpapper till kund: Stefan Ingves, ID: 6468</string>
+                       </void>
+                       <void method="add">
+                        <string>2024-02-06. Säljare: Michael Scott, ID:945, har sålt Skrivarpapper till kund: Bengt Magnusson, ID: 7348</string>
+                       </void>
+                      </void>
+                      <void property="name">
+                       <string>Tomas Wigell</string>
+                      </void>
+                      <void property="password">
+                       <string>666</string>
+                      </void>
+                      <void property="sales">
+                       <void method="add">
+                        <object idref="Sale11"/>
+                       </void>
+                       <void method="add">
+                        <object idref="Sale10"/>
+                       </void>
+                       <void method="add">
+                        <object idref="Sale7"/>
+                       </void>
+                       <void method="add">
+                        <object idref="Sale6"/>
+                       </void>
+                      </void>
+                     </object>
+                    </void>
+                   </object>
+                  </void>
+                  <void method="add">
+                   <object idref="Sale9"/>
+                  </void>
+                  <void method="add">
+                   <object idref="Sale5"/>
+                  </void>
+                 </void>
+                </object>
+               </void>
+               <void property="date">
+                <object class="java.time.LocalDate" method="parse">
+                 <string>2024-02-06</string>
+                </object>
+               </void>
+               <void property="numberOfItems">
+                <int>1</int>
+               </void>
+               <void property="price">
+                <double>55.0</double>
+               </void>
+               <void property="productName">
+                <string>Ettan portion</string>
+               </void>
+               <void property="saleId">
+                <int>30908</int>
+               </void>
+               <void property="seller">
+                <object idref="Seller1"/>
+               </void>
+              </object>
+             </void>
             </void>
            </object>
           </void>
          </object>
         </void>
         <void method="add">
-         <object class="business.Sale" id="Sale5">
+         <object class="business.Sale" id="Sale12">
           <void property="customer">
            <object idref="Customer0"/>
           </void>
@@ -276,6 +586,11 @@
     <void property="id">
      <int>945</int>
     </void>
+    <void property="messages">
+     <void method="add">
+      <string>2024-02-06. Säljare: Tomas Wigell, ID:659, har sålt Ettan portion till kund: Stefan Ingves, ID: 6468</string>
+     </void>
+    </void>
     <void property="name">
      <string>Michael Scott</string>
     </void>
@@ -284,7 +599,7 @@
     </void>
     <void property="sales">
      <void method="add">
-      <object idref="Sale5"/>
+      <object idref="Sale12"/>
      </void>
      <void method="add">
       <object idref="Sale2"/>

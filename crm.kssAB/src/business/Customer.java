@@ -55,6 +55,7 @@ public class Customer implements Serializable{ /**
 		return name+", ID: "+id;
 	}
 
+	// Override på equals-metoden. hade tidigare problem med att samma kund kunde läggas till i lista trots "if !contains(customer)"
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {

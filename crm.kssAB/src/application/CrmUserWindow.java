@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -32,10 +33,10 @@ import report.ReportManager;
 public class CrmUserWindow {
 
 	AlertBox alertBox = new AlertBox();
-	ChoiceBox<Customer> choiceBoxCustomer = new ChoiceBox<>();
+	ChoiceBox<Customer> choiceBoxCustomer = new ChoiceBox<>(); // choicebox för säljarens kunder.
 	Stage logInStage;
 
-	Seller seller;
+	Seller seller; // = inloggad säjare.
 
 	public void crmPrimaryWindow(Seller seller) { 
 		Stage stage = new Stage();
@@ -98,7 +99,7 @@ public class CrmUserWindow {
 			}
 		});
 		
-		Button showAllReportsButton = new Button("Visa rapporter");
+		Button showAllReportsButton = new Button("Visa & Exportera");
 		showAllReportsButton.setOnAction( e -> showAllReportsWindow());
 		
 		Button exitButton = new Button("Logga ut");
@@ -163,7 +164,7 @@ public class CrmUserWindow {
 		double totalAmount = BusinessObjectManager.getInstance().getTotalSellAmountFromSeller(seller);
 		
 		Label label = new Label();
-		label.setText("Fyll i 'Titel' och 'Introuktion' i fälten nedan.");
+		label.setText("Fyll i 'Titel' och 'Introduktion' i fälten nedan.");
 		
 		TextField titleField = new TextField(); // titel, intro, objektnamn, antal, summa.
 		titleField.setPromptText("Titel");
@@ -198,7 +199,7 @@ public class CrmUserWindow {
 		createProductReportStage.setTitle("Ny rapport");
 		
 		Label label = new Label();
-		label.setText("Fyll i 'Titel' och 'Introuktion' i fälten nedan.");
+		label.setText("Fyll i 'Titel', 'Introduktion'\noch produktens namn i fälten nedan.");
 		
 		TextField titleField = new TextField(); // titel, intro, objektnamn, antal, summa.
 		titleField.setPromptText("Titel");
@@ -245,7 +246,7 @@ public class CrmUserWindow {
 		createCustomerReportStage.setTitle("Ny rapport");
 		
 		Label label = new Label();
-		label.setText("Fyll i 'Titel' och 'Introuktion' i fälten nedan.");
+		label.setText("Fyll i 'Titel', 'Introduktion'\noch kundens ID i fälten nedan.");
 		
 		TextField titleField = new TextField(); // titel, intro, objektnamn, antal, summa.
 		titleField.setPromptText("Titel");
@@ -318,8 +319,9 @@ public class CrmUserWindow {
         exportButton.setOnAction(e -> {
         	Report selectedReport = listView.getSelectionModel().getSelectedItem();
             if (selectedReport != null) {
-            	 ReportManager.getInstance().createExportDAO(selectedReport);
-            	 alertBox.alertBox("Exportering lyckad", "Rapport "+selectedReport.getReportNumber()+" exporterad till XML");
+            	exportDAOWindow(selectedReport);
+            	 //ReportManager.getInstance().createExportDAO(selectedReport);
+            	 //alertBox.alertBox("Exportering lyckad", "Rapport "+selectedReport.getReportNumber()+" exporterad till XML");
             	 showAllReportStage.close();
             }
         });
@@ -335,6 +337,76 @@ public class CrmUserWindow {
         scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
         showAllReportStage.setScene(scene);
         showAllReportStage.show();
+        
+	}
+	
+	public void exportDAOWindow(Report report) {
+		Stage stage = new Stage();
+		stage.setTitle("Val för export");
+		stage.initModality(Modality.APPLICATION_MODAL);
+		
+		CheckBox titleCheckBox = new CheckBox("Titel: "+report.getTitle());
+        CheckBox introductionCheckBox = new CheckBox("Intro: "+report.getIntroduction());
+        CheckBox objectNameCheckBox = new CheckBox("Namn: "+report.getObjectName());
+        CheckBox numberOfTransactionsCheckBox = new CheckBox("Antal Transaktioner: "+Integer.toString(report.getNumberOfTransactions())); // Konvertera int till sträng
+        CheckBox totalAmountCheckBox = new CheckBox("Total Summa: "+Double.toString(report.getTotalAmount())); // Konvertera double till sträng
+		
+        Button exportButton = new Button("Bekräfta val och exportera");
+        exportButton.setOnAction(e ->{
+        	String title = "";
+        	String intro = "";
+        	String objectName = "";
+        	int transactionVolume = 0;
+        	double transactionAmount = 0;
+        	
+        	if (titleCheckBox.isSelected()) {
+                title = report.getTitle();
+            }
+            if (introductionCheckBox.isSelected()) {
+                intro = report.getIntroduction();
+            }
+            if (objectNameCheckBox.isSelected()) {
+                objectName = report.getObjectName();
+            }
+            if (numberOfTransactionsCheckBox.isSelected()) {
+                transactionVolume = report.getNumberOfTransactions();
+            }
+            if (totalAmountCheckBox.isSelected()) {
+                transactionAmount = report.getTotalAmount();
+            }
+            
+            Report newReport = ReportManager.getInstance().createNewReport(
+            		title, intro, objectName, transactionVolume, transactionAmount);
+            ReportManager.getInstance().createExportDAO(newReport);
+            alertBox.alertBox("Rapport Exporterad", "ID för exporterad rapport: "+newReport.getReportNumber());
+            stage.close();
+        });
+        
+        Button exitButton = new Button("Avbryt");
+        exitButton.setOnAction(e -> stage.close());
+        
+		VBox vBoxCheck = new VBox();
+		vBoxCheck.setAlignment(Pos.CENTER_LEFT);
+		vBoxCheck.setSpacing(20);
+		vBoxCheck.setPadding(new Insets(10));
+		vBoxCheck.getChildren().addAll(titleCheckBox, introductionCheckBox, objectNameCheckBox, 
+				numberOfTransactionsCheckBox, totalAmountCheckBox, exportButton);
+		
+		HBox hBox = new HBox();
+		hBox.setAlignment(Pos.CENTER);
+		hBox.setSpacing(20);
+		hBox.setPadding(new Insets(10));
+		hBox.getChildren().addAll(exportButton, exitButton);
+		
+		VBox layout = new VBox();
+		layout.setAlignment(Pos.CENTER);
+		layout.setSpacing(20);
+		layout.setPadding(new Insets(10));
+		layout.getChildren().addAll(vBoxCheck, hBox);
+		
+		Scene scene = new Scene(layout, 500, 300);
+		stage.setScene(scene);
+		stage.show();
         
 	}
 	
@@ -417,7 +489,7 @@ public class CrmUserWindow {
 		
 		tableView.getColumns().addAll(nameColumn, idColumn, priceColumn, quantityColumn, dateColumn, customerColumn);
 		
-		Scene scene = new Scene(tableView, 480, 500);
+		Scene scene = new Scene(tableView, 500, 500);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		showSalesStage.setScene(scene);
 		showSalesStage.show();

@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+// Singleton. Innehåller lista över exporterade DAO-object och interna metoder för filhantering.
 
-
-public class ReportDAO { // Create, Read, Update, Delete (CRUD)
+public class ReportDAO { 
 
 	private List<Report> reportsDAOList = new ArrayList<>();
 	private final String filepath = ".DAO.xml";

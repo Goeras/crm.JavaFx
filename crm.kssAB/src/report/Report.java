@@ -1,13 +1,19 @@
 package report;
 
-public class Report {
+import java.io.Serializable;
 
-	protected String title;
-	protected String introduction;
-	protected String objectName;
-	protected int numberOfTransactions;
-	protected double totalAmount;
-	protected int reportNumber;
+public class Report implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5065913250896187696L;
+	private String title;
+	private String introduction;
+	private String objectName;
+	private int numberOfTransactions;
+	private double totalAmount;
+	private int reportNumber;
 	
 	public Report() {
 	}

@@ -11,6 +11,8 @@ import java.util.Set;
 
 import fileProcessing.BusinessObjectFileProcessing;
 
+
+// Singleton för att säkerställa att det bara finns en instans av denna klass och listor.
 public class BusinessObjectManager {
 	
 	BusinessObjectFileProcessing fileProcessing = new BusinessObjectFileProcessing();
@@ -273,14 +275,11 @@ public class BusinessObjectManager {
 		return totalAmount;
 	}
 	public int getTotalNumberOfSalesForProduct(String product) {
-		System.out.println(product);
 		System.out.println(listOfAllSales.size());
 		int numberOfSales = 0;
 		for(Sale sale : listOfAllSales) {
-			System.out.println(sale.getProductName());
 			if(sale.getProductName().equalsIgnoreCase(product)) {
 				numberOfSales += sale.getNumberOfItems();
-				System.out.println("getTotalNumberOfSalesForProduct 2");
 			}
 		}
 		return numberOfSales;
@@ -311,7 +310,7 @@ public class BusinessObjectManager {
 		
 	}
 
-	public void addStartingObjects() {
+	public void addStartingObjects() { // Lägger till några startobjekt av Seller och Customer.
 		if(listOfAllSellers.isEmpty()) {
 			
 			createNewSeller("Michael Scott", "The Office", "0000");

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-
+// Singleton för att säkerställa att det ej skapas upp flera objekt och listor ur denna klass.
 public class ReportManager {
 
-	List<Report> listOfAllReports = new ArrayList<>();
+	List<Report> listOfAllReports = new ArrayList<>(); // Sparas ej till fil. enbart exporterade DAO-rapporter sparas till fil.
 	
 	private static ReportManager instance;
 	
@@ -38,7 +38,7 @@ public class ReportManager {
 	
 	public void createExportDAO(Report report) {
 		ReportDAO.getInstance().save(report);
-	}
+	}	
 	
 	public void addReport(Report report) {
 		listOfAllReports.add(report);

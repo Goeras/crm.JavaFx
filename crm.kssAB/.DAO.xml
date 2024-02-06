@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="20.0.2" class="java.beans.XMLDecoder">
+ <object class="java.util.ArrayList">
+  <void method="add">
+   <object class="report.Report">
+    <void property="introduction">
+     <string>här är en rapport som visar alla mina sälj</string>
+    </void>
+    <void property="objectName">
+     <string>Tomas Wigell</string>
+    </void>
+    <void property="reportNumber">
+     <int>725704</int>
+    </void>
+    <void property="title">
+     <string>alla sälj</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="report.Report">
+    <void property="introduction">
+     <string>asdsadsadasd asdsa</string>
+    </void>
+    <void property="objectName">
+     <string>Tomas Wigell</string>
+    </void>
+    <void property="reportNumber">
+     <int>172584</int>
+    </void>
+    <void property="title">
+     <string></string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="report.Report">
+    <void property="introduction">
+     <string>ja visst serru</string>
+    </void>
+    <void property="objectName">
+     <string>Tomas Wigell</string>
+    </void>
+    <void property="reportNumber">
+     <int>828099</int>
+    </void>
+    <void property="title">
+     <string>Rapport som visar alla mina sälj</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="report.Report">
+    <void property="introduction">
+     <string>visar alla försäljningar av Ettan Lös</string>
+    </void>
+    <void property="numberOfTransactions">
+     <int>4</int>
+    </void>
+    <void property="objectName">
+     <string>Ettan Lös</string>
+    </void>
+    <void property="reportNumber">
+     <int>247627</int>
+    </void>
+    <void property="title">
+     <string>rapport för Ettan Lös</string>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>
